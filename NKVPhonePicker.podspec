@@ -22,9 +22,7 @@ Pod::Spec.new do |s|
 
   s.module_name  = 'NKVPhonePicker'
   s.source_files = 'Sources/**/*.swift'
-  s.resource_bundles = {
-    'NKVPhonePicker' => ['Sources/Bundle/*']
-  }
+  s.resources = 'Sources/Bundle/*'
 
   s.social_media_url = 'https://vk.com/lightwithme'
 

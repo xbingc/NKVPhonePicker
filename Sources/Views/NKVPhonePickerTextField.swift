@@ -11,7 +11,7 @@ public class NKVPhonePickerTextField: UITextField {
     // MARK: - Interface
     /// Set this property in order to present the CountryPickerViewController
     /// when user clicks on the flag button
-    @IBOutlet weak var phonePickerDelegate: UIViewController?
+    @IBOutlet public weak var phonePickerDelegate: UIViewController?
 
     /// - Returns: Current phone number in textField with spaces. Ex: +7 999 777 33 44
     public var rawPhoneNumber: String {

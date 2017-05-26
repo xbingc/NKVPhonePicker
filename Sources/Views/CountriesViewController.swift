@@ -163,7 +163,7 @@ extension CountriesViewController {
         cell.imageView?.transform = CGAffineTransformMakeScale(0.8, 0.8)
         
         cell.accessoryType = .None
-        if let selectedCountry = selectedCountry where country.isEqual( selectedCountry.countryCode) {
+        if let selectedCountry = selectedCountry where country.isEqual(selectedCountry) {
             cell.accessoryType = .Checkmark
         }
         
