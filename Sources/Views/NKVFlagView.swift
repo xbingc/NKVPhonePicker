@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NKVFlagView: UIView {
+final public class NKVFlagView: UIView {
     // MARK: - Interface
     /// Size of the flag icon
     public var iconSize: CGSize     { didSet { configureInstance() } }
@@ -20,25 +20,25 @@ final class NKVFlagView: UIView {
     public var flagButton: UIButton = UIButton()
     
     /// Convenience method to set the flag with Country entity.
-    public func setFlagWith(country: Country) {
-        self.setFlagWith(countryCode: country.countryCode)
+    public func setFlagWithCountry(country: Country) {
+        self.setFlagWithCountryCode(country.countryCode)
     }
     
     /// Convenience method to set the flag with phone extension.
-    public func setFlagWith(phoneExtension: String) {
-        let country = Country.countryBy(phoneExtension: phoneExtension)
-        self.setFlagWith(country: country)
+    public func setFlagWithPhoneExtension(phoneExtension: String) {
+        let country = Country.countryByPhoneExtension(phoneExtension)
+        self.setFlagWithCountry(country)
     }
     
     /// Method for setting a flag with country (region) code.
-    public func setFlagWith(countryCode: String?) {
+    public func setFlagWithCountryCode(countryCode: String?) {
         let code = countryCode ?? "?"
         
-        currentPresentingCountry = Country.countryBy(countryCode: code)
+        currentPresentingCountry = Country.countryByCountryCode(code)
         
         let flagImage = NKVSourcesHelper.getFlagImage(by: code)
-        self.flagButton.setImage(flagImage, for: .normal)
-        self.flagButton.imageView?.contentMode = .scaleAspectFit
+        self.flagButton.setImage(flagImage, forState: .Normal)
+        self.flagButton.imageView?.contentMode = .ScaleAspectFit
     }
     
     public required init(with textField: UITextField) {
@@ -47,7 +47,7 @@ final class NKVFlagView: UIView {
         self.iconSize = CGSize(width: 18.0, height: textField.frame.height)
         super.init(frame: CGRect.zero)
         configureInstance()
-        setFlagWith(countryCode: NKVLocalizationHelper.currentCode)
+        setFlagWithCountryCode(NKVLocalizationHelper.currentCode)
     }
     
     // MARK: - Implementation
@@ -63,11 +63,11 @@ final class NKVFlagView: UIView {
         // Adding flag button to flag's view
         flagButton = UIButton.init(frame: self.frame)
         flagButton.imageEdgeInsets = insets;
-        flagButton.contentMode = .scaleToFill
+        flagButton.contentMode = .ScaleToFill
         if flagButton.superview == nil { self.addSubview(flagButton) }
         
         self.layoutIfNeeded()
     }
     
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not supported"); }
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not supported"); }
 }

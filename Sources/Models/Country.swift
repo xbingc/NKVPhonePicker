@@ -28,12 +28,15 @@ public class Country: NSObject {
         guard let currentCountryCode = NKVLocalizationHelper.currentCode else {
             return Country.empty
         }
-        return Country.countryBy(countryCode: currentCountryCode)
+        return Country.countryByCountryCode(currentCountryCode)
     }
     
     /// Making entities comparable
-    static public func ==(lhs: Country, rhs: Country) -> Bool {
-        return lhs.countryCode == rhs.countryCode
+    override public func isEqual(object: AnyObject?) -> Bool {
+        if let rhs = object as? Country {
+            return countryCode == rhs.countryCode
+        }
+        return false
     }
     
     // MARK: - Class methods   
@@ -47,8 +50,8 @@ public class Country: NSObject {
     /// Returns a country by a phone extension.
     ///
     /// - Parameter phoneExtension: For example: "+241"
-    public class func countryBy(phoneExtension: String) -> Country {
-        let phoneExtension = (phoneExtension as NSString).replacingOccurrences(of: "+", with: "")
+    public class func countryByPhoneExtension(phoneExtension: String) -> Country {
+        let phoneExtension = phoneExtension.cutPluses
         for country in NKVSourcesHelper.countries {
             if phoneExtension == country.phoneExtension {
                 return country
@@ -60,9 +63,9 @@ public class Country: NSObject {
     /// Returns a country by a country code.
     ///
     /// - Parameter countryCode: For example: "FR"
-    public class func countryBy(countryCode: String) -> Country {
+    public class func countryByCountryCode(countryCode: String) -> Country {
         for country in NKVSourcesHelper.countries {
-            if countryCode.lowercased() == country.countryCode.lowercased() {
+            if countryCode.lowercaseString == country.countryCode.lowercaseString {
                 return country
             }
         }
@@ -72,9 +75,9 @@ public class Country: NSObject {
     /// Returns a countries array from the country codes.
     ///
     /// - Parameter countryCodes: For example: ["FR", "EN"]
-    public class func countriesBy(countryCodes: [String]) -> [Country] {
+    public class func countriesByCountryCodes(countryCodes: [String]) -> [Country] {
         return countryCodes.map { code in
-            Country.countryBy(countryCode: code)
+            Country.countryByCountryCode(code)
         }
     }
 }

@@ -14,13 +14,13 @@ struct NKVLocalizationHelper {
     ///
     /// If region code didn't found - it would be "JM" by default.
     static var currentCode: String? {
-        let currentLocale = Locale.current
-        let regionCode = currentLocale.regionCode?.uppercased()
-        return regionCode
+        let currentLocale = NSLocale.currentLocale()
+        let regionCode = currentLocale.objectForKey(NSLocaleCountryCode) as! String
+        return regionCode.uppercaseString
     }
     
     /// Returns a localized country name by a country code of the current locale.
     static func countryName(by countryCode: String) -> String? {
-        return (Locale.current as NSLocale).displayName(forKey: .countryCode, value: countryCode)
+        return NSLocale.currentLocale().displayNameForKey(NSLocaleCountryCode, value: countryCode)
     }
 }

@@ -8,10 +8,10 @@
 
 extension String {
     var cutSpaces: String {
-        return self.replacingOccurrences(of: " ", with: "")
+        return self.stringByReplacingOccurrencesOfString(" ", withString: "")
     }
     
     var cutPluses: String {
-        return self.replacingOccurrences(of: "+", with: "")
+        return self.stringByReplacingOccurrencesOfString("+", withString: "")
     }
 }

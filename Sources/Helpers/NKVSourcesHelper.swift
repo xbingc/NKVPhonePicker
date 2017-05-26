@@ -8,10 +8,10 @@
 
 import UIKit
 
-struct NKVSourcesHelper {
+public struct NKVSourcesHelper {
     /// Returns the flag image or nil, if there are not such image for this code.
     public static func getFlagImage(by code: String) -> UIImage? {
-        let flagImage = UIImage(named: "Countries.bundle/Images/\(code.uppercased())", in: Bundle(for: NKVPhonePickerTextField.self), compatibleWith: nil)
+        let flagImage = UIImage(named: "Countries.bundle/Images/\(code.uppercaseString)", inBundle: NSBundle(forClass: NKVPhonePickerTextField.self), compatibleWithTraitCollection: nil)
         
         return flagImage
     }
@@ -21,8 +21,8 @@ struct NKVSourcesHelper {
     }
     
     public static func isFlagExistsWith(phoneExtension: String) -> Bool {
-        let countryWithString = Country.countryBy(phoneExtension: phoneExtension)
-        if countryWithString == Country.empty { return false }
+        let countryWithString = Country.countryByPhoneExtension(phoneExtension)
+        if countryWithString.isEqual(Country.empty) { return false }
         return (self.getFlagImage(by: countryWithString.countryCode) != nil)
     }
     
@@ -30,9 +30,9 @@ struct NKVSourcesHelper {
         var countries: [Country] = []
         
         do {
-            if let file = Bundle(for: NKVPhonePickerTextField.self).url(forResource: "Countries.bundle/Data/countryCodes", withExtension: "json") {
-                let data = try Data(contentsOf: file)
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
+            if let file = NSBundle(forClass: NKVPhonePickerTextField.self).URLForResource("Countries.bundle/Data/countryCodes", withExtension: "json") {
+                let data = NSData(contentsOfURL: file)
+                let json = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
                 if let array = json as? Array<[String: String]> {
                     for object in array {
                         guard let code = object["code"],
@@ -47,7 +47,7 @@ struct NKVSourcesHelper {
                 print("No such a file")
             }
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
         
         return countries

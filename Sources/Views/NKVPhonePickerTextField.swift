@@ -25,7 +25,11 @@ public class NKVPhonePickerTextField: UITextField {
     
     /// - Returns: Current phone number in textField without code. Ex: 9997773344.
     public var phoneNumberWithoutCode: String {
-        return (self.text?.replacingOccurrences(of: code, with: "").cutSpaces.cutPluses)!
+        if isPlusPrefixImmortal {
+            return (self.text?.stringByReplacingOccurrencesOfString("+\(code)", withString: "").cutSpaces.cutPluses)!
+        } else {
+            return "This feature is not available yet with 'isPlusPrefixImmortal == false'"
+        }
     }
     
     /// - Returns: Current phone code without +. Ex: 7
@@ -55,8 +59,8 @@ public class NKVPhonePickerTextField: UITextField {
     public var currentSelectedCountry: Country? {
         didSet {
             if let selected = currentSelectedCountry {
-                self.setCode(country: selected)
-                self.setFlag(country: selected)
+                self.setCode(selected)
+                self.setFlagWithCountry(selected)
             }
         }
     }
@@ -85,19 +89,19 @@ public class NKVPhonePickerTextField: UITextField {
     /// Method for set flag with countryCode.
     ///
     /// If nil it would be "?" code. This code present a flag with question mark.
-    public func setFlag(countryCode: String?) {
-        flagView.setFlagWith(countryCode: countryCode)
+    public func setFlagWithCountryCode(countryCode: String?) {
+        flagView.setFlagWithCountryCode(countryCode)
     }
     
     /// Method for set flag with Country entity.
-    public func setFlag(country: Country) {
-        flagView.setFlagWith(country: country)
+    public func setFlagWithCountry(country: Country) {
+        flagView.setFlagWithCountry(country)
     }
     
     /// Method for set flag with phone extenion.
-    public func setFlag(phoneExtension: String) {
-        if NKVSourcesHelper.isFlagExistsWith(phoneExtension: phoneExtension) {
-            flagView.setFlagWith(phoneExtension: phoneExtension)
+    public func setFlagWithPhoneExtension(phoneExtension: String) {
+        if NKVSourcesHelper.isFlagExistsWith(phoneExtension) {
+            flagView.setFlagWithPhoneExtension(phoneExtension)
         }
     }
     
@@ -114,16 +118,16 @@ public class NKVPhonePickerTextField: UITextField {
     }
     
     private func initialize() {
-        self.leftViewMode = .always;
-        self.keyboardType = .numberPad
+        self.leftViewMode = .Always;
+        self.keyboardType = .NumberPad
         flagView = NKVFlagView(with: self)
         self.leftView = flagView
         self.delegate = self
         
         currentSelectedCountry = Country.currentCountry
         
-        flagView.flagButton.addTarget(self, action: #selector(presentCountriesViewController), for: .touchUpInside)
-        self.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        flagView.flagButton.addTarget(self, action: #selector(presentCountriesViewController), forControlEvents: .TouchUpInside)
+        self.addTarget(self, action: #selector(textFieldDidChange), forControlEvents: .EditingChanged)
     }
     
     /// Presents a view controller to choose a country code.
@@ -134,13 +138,13 @@ public class NKVPhonePickerTextField: UITextField {
             let navC = UINavigationController.init(rootViewController: countriesVC)
             
             customizeCountryPicker(countriesVC)
-            delegate.present(navC, animated: true, completion: nil)
+            delegate.presentViewController(navC, animated: true, completion: nil)
         }
     }
     
     // MARK: Customization
     /// Method to customize the CountryPickerController.
-    private func customizeCountryPicker(_ pickerVC: CountriesViewController) {
+    private func customizeCountryPicker(pickerVC: CountriesViewController) {
         pickerVC.shouldScrollToSelectedCountry = shouldScrollToSelectedCountry
         
         if let currentSelectedCountry = currentSelectedCountry {
@@ -158,8 +162,8 @@ public class NKVPhonePickerTextField: UITextField {
         }
         if let pickerCancelButtonFont = pickerCancelButtonFont {
             let fontAttributes = [NSFontAttributeName: pickerCancelButtonFont]
-            pickerVC.countriesVCNavigationItem.leftBarButtonItem?.setTitleTextAttributes(fontAttributes, for: .normal)
-            pickerVC.countriesVCNavigationItem.leftBarButtonItem?.setTitleTextAttributes(fontAttributes, for: .highlighted)
+            pickerVC.countriesVCNavigationItem.leftBarButtonItem?.setTitleTextAttributes(fontAttributes, forState: .Normal)
+            pickerVC.countriesVCNavigationItem.leftBarButtonItem?.setTitleTextAttributes(fontAttributes, forState: .Highlighted)
         }
         if let pickerCancelButtonTitle = pickerCancelButtonTitle {
             pickerVC.countriesVCNavigationItem.leftBarButtonItem?.title = pickerCancelButtonTitle
@@ -183,27 +187,27 @@ public class NKVPhonePickerTextField: UITextField {
 }
 
 extension NKVPhonePickerTextField: CountriesViewControllerDelegate {
-    public func countriesViewController(_ sender: CountriesViewController, didSelectCountry country: Country) {
+    public func countriesViewController(sender: CountriesViewController, didSelectCountry country: Country) {
         currentSelectedCountry = country
     }
-    public func countriesViewControllerDidCancel(_ sender: CountriesViewController) {
+    public func countriesViewControllerDidCancel(sender: CountriesViewController) {
         /// Do nothing yet
     }
 }
 
 extension NKVPhonePickerTextField: UITextFieldDelegate {
     
-    @objc fileprivate func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         if let newString = self.text {
             if newString.characters.count == 1 || newString.characters.count == 0 {
-                self.setFlag(countryCode: "?")
+                self.setFlagWithCountryCode("?")
             }
             
             if isPlusPrefixImmortal {
                 self.text = "+\(newString.cutPluses)"
             }
 
-            self.setFlag(phoneExtension: newString)
+            self.setFlagWithPhoneExtension(newString)
         }
     }
 }

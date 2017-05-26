@@ -18,24 +18,24 @@ class ExampleViewController: UIViewController {
         topTextField.favoriteCountriesLocaleIdentifiers = ["RU", "ER", "JM"]
 //        topTextField.setFlag(countryCode: nil)
 //        topTextField.isPlusPrefixImmortal = false
-        topTextField.shouldScrollToSelectedCountry = false
+//        topTextField.shouldScrollToSelectedCountry = false
     }
-    @IBAction func didPressRawPhoneNumber(_ sender: UIButton) {
+    @IBAction func didPressRawPhoneNumber(sender: UIButton) {
        outputLabel.text = topTextField.rawPhoneNumber
     }
     
-    @IBAction func didPressPhoneNumber(_ sender: UIButton) {
+    @IBAction func didPressPhoneNumber(sender: UIButton) {
         outputLabel.text = topTextField.phoneNumber
     }
     
-    @IBAction func didPressPhoneNumberWithoutCode(_ sender: UIButton) {
+    @IBAction func didPressPhoneNumberWithoutCode(sender: UIButton) {
         outputLabel.text = topTextField.phoneNumberWithoutCode
     }
 
-    @IBAction func didPressCode(_ sender: UIButton) {
+    @IBAction func didPressCode(sender: UIButton) {
         outputLabel.text = topTextField.code
     }
-    @IBAction func didPressOnView(_ sender: UITapGestureRecognizer) {
+    @IBAction func didPressOnView(sender: UITapGestureRecognizer) {
         self.topTextField.resignFirstResponder()
     }
 }
