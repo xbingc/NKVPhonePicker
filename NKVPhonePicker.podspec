@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint CountryPicker.podspec' to ensure this is a
+# Be sure to run `pod lib lint NKVPhonePicker.podspec' to ensure this is a
 # valid spec before submitting.
 #
 
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.module_name  = 'NKVPhonePicker'
   s.source_files = 'Sources/**/*.swift'
   s.resource_bundles = {
-    'CountryPicker' => ['Sources/Bundle/*']
+    'NKVPhonePicker' => ['Sources/Bundle/*']
   }
 
   s.social_media_url = 'https://vk.com/lightwithme'

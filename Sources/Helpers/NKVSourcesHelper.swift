@@ -44,7 +44,7 @@ public struct NKVSourcesHelper {
                     }
                 }
             } else {
-                print("No such a file")
+                print("NKVPhonePickerTextField can't find a bundle for the countries")
             }
         } catch {
             print(error)
