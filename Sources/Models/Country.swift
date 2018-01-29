@@ -14,7 +14,9 @@ public class Country: NSObject {
     /// Ex: "RU"
     public var countryCode: String
     /// Ex: "+7"
-    public var phoneExtension: String
+    // Bing-edited (begin): @objc for search available
+    @objc public var phoneExtension: String
+    // Bing-edited (end)
     /// Ex: "Russia"
     @objc public var name: String {
         return NKVLocalizationHelper.countryName(by: countryCode) ?? ""
