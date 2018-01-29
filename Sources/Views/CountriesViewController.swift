@@ -162,8 +162,10 @@ extension CountriesViewController {
             cell.detailTextLabel?.font = cellsFont
         }
 
-        let flag = NKVSourcesHelper.getFlagImage(by: country.countryCode)
-        cell.imageView?.image = flag
+        // Bing-edited (begin): remove flag image
+//        let flag = NKVSourcesHelper.getFlagImage(by: country.countryCode)
+//        cell.imageView?.image = flag
+        // Bing-edited (end)
         cell.imageView?.contentMode = .scaleAspectFit
         cell.imageView?.clipsToBounds = true
         cell.imageView?.layer.cornerRadius = 3
