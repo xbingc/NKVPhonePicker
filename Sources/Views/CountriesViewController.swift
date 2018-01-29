@@ -232,8 +232,19 @@ extension CountriesViewController: UISearchResultsUpdating {
         if text.isEmpty {
             filteredCountries = unfilteredCountries
         } else {
-            let allCountriesArray: [Country] = NKVSourcesHelper.countries.filter { $0.name.range(of: text) != nil }
-            filteredCountries = partioned(array: allCountriesArray, usingSelector: #selector(getter: Country.name))
+            // Bing-edited (begin): 增加根据dial_code的搜索
+            let decimalCharacters = CharacterSet.decimalDigits
+            let decimalRange = text.rangeOfCharacter(from: decimalCharacters)
+            // 进入 dial_code 或 name 搜索
+            if decimalRange != nil {
+                let allCountriesArray: [Country] = NKVSourcesHelper.countries.filter { $0.phoneExtension.range(of: text) != nil }
+                filteredCountries = partioned(array: allCountriesArray, usingSelector: #selector(getter: Country.phoneExtension))
+            } else {
+                let allCountriesArray: [Country] = NKVSourcesHelper.countries.filter { $0.name.range(of: text) != nil }
+                filteredCountries = partioned(array: allCountriesArray, usingSelector: #selector(getter: Country.name))
+            }
+            // Bing-edited (end)
+            
             filteredCountries.insert([], at: 0) //Empty section for our favorites
         }
         tableView.reloadData()
